@@ -21,6 +21,11 @@ public class Board
 			board[1][i] = new Pawn("black", 1, i);
 			board[6][i] = new Pawn("white", 6, i);
 		}
+		board[0][0] = new Rook("black", 0, 0);
+		board[7][0] = new Rook("white", 7, 0);
+		board[0][7] = new Rook("black", 0, 7);
+		board[7][7] = new Rook("white", 7, 7);
+
 	}
 	
 	/**
@@ -41,9 +46,9 @@ public class Board
 				if(board[i][j] == null)
 				{
 					if((i + j)%2 == 0)
-						System.out.print("## ");
-					else
 						System.out.print("   ");
+					else
+						System.out.print("## ");
 				} else //case where space is occupied by a piece
 				{
 					System.out.print(board[i][j].color.charAt(0));
