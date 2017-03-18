@@ -82,6 +82,6 @@ public class Rook extends Piece
 	
 	public String toString()
 	{
-		return "r";
+		return "R";
 	}
 }
