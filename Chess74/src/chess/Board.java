@@ -11,6 +11,10 @@ public class Board
 
 	public Piece[][] board;
 	
+	
+	/**
+	 * Creates a board filled with pieces at appropriate locations
+	 */
 	public Board()
 	{
 		
@@ -22,15 +26,13 @@ public class Board
 			board[6][i] = new Pawn("white", 6, i);
 		}
 		board[0][0] = new Rook("black", 0, 0);
-		board[7][0] = new Rook("white", 7, 0);
-		board[0][7] = new Rook("black", 0, 7);
+		board[0][7] = new Rook("black", 7, 0);
+		board[7][0] = new Rook("white", 0, 7);
 		board[7][7] = new Rook("white", 7, 7);
 
 	}
 	
 	/**
-	 *printBoard()
-	 *
 	 *Traverses board to print text representation
 	 */
 	public void printBoard()

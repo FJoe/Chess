@@ -1,52 +1,39 @@
 package chess;
 
+/**
+*This class constructs Pieces representing rooks
+*@authors Dillon Heyck and Francis Joe
+*/
 public class Rook extends Piece
 {
+	/**
+	 * Creates a Pawn piece
+	 * @param color Whether piece is black or white
+	 * @param x starting x position
+	 * @param y starting y position
+	 */
 	public Rook(String color, int x, int y){
 		super(color, x, y);
 	}
 
+	
 	public boolean tryMove(int x2, int y2, Piece[][] board) {
-		if(this.X == x2 && this.Y == y2)
-			return false;
-		if(this.X != x2 && this.Y != y2)
-			return false;
-		if(board[x2][y2] != null && board[x2][y2].color.equals(this.color))
+		if(!tryMoveInit(x2,y2,board))
 			return false;
 		
-		if(this.X == x2){
+		//Checks if another piece is in between start and end positions
+		if(this.x == x2){
 			int init;
 			int end;
-			if(this.Y > y2)
+			if(this.y > y2)
 			{
-				init = y2;
-				end = this.Y;
+				init = y2 + 1;
+				end = this.y;
 			}
 			else
 			{
-				init = y2;
-				end = this.Y;
-			}
-			
-			for(int i = init; i < end; i++)
-			{
-				if(board[x2][i] != null)
-					return false;
-			}
-		}
-		else
-		{
-			int init;
-			int end;
-			if(this.X > x2)
-			{
-				init = x2;
-				end = this.X;
-			}
-			else
-			{
-				init = x2;
-				end = this.X;
+				init = this.y + 1;
+				end = y2;
 			}
 			
 			for(int i = init; i < end; i++)
@@ -55,12 +42,42 @@ public class Rook extends Piece
 					return false;
 			}
 		}
+		else if(this.y == y2)
+		{
+			int init;
+			int end;
+			if(this.x > x2)
+			{
+				init = x2 + 1;
+				end = this.x;
+			}
+			else
+			{
+				init = this.x + 1;
+				end = x2;
+			}
+			
+			for(int i = init; i < end; i++)
+				if(board[y2][i] != null)
+					return false;
+		}
+		//End pos is not a legal move rooks can make
+		else 
+		{
+			return false;
+
+		}
 		
 		return true;
 	}
 
-	public void move(int X, int Y, Piece[][] board) {
-		
+	public void move(int x, int y, Piece[][] board) 
+	{
+		board[this.y][this.x] = null;
+		hasMoved = true;
+		this.x = x;
+		this.y = y;
+		board[y][x] = this;
 	}
 	
 	public String toString()

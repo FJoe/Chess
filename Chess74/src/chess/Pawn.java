@@ -10,62 +10,71 @@ public class Pawn extends Piece
 	boolean hasMoved = false;
 	//Tracks if the pawn JUST moved two spaces
 	
-	public Pawn(String color, int X, int Y)
+	/**
+	 * Creates a Pawn piece
+	 * @param color Whether piece is black or white
+	 * @param x starting x position
+	 * @param y starting y position
+	 */
+	public Pawn(String color, int x, int y)
 	{
-		super(color, X, Y);
+		super(color, x, y);
 	}
 
 	
-	public void move(int X, int Y, Piece[][] board)
+	public void move(int x, int y, Piece[][] board)
 	{
 		hasMoved = true;
-		this.X = X;
-		this.Y = Y;
-		if(color.equals("white") && (Y - this.Y) == 2)
+		this.x = x;
+		this.y = y;
+		if(color.equals("white") && (y - this.y) == 2)
 			hasMoved2 = true;
-		else if(color.equals("black") && (this.Y - Y) == 2)
+		else if(color.equals("black") && (this.y - y) == 2)
 			hasMoved2 = true;
 		else hasMoved2 = false;
 	}
 	
-	public boolean tryMove(int X2, int Y2, Piece[][] board)
+	public boolean tryMove(int x2, int y2, Piece[][] board)
 	{
+		if(!tryMoveInit(x2,y2,board))
+			return false;
+		
 		//This if-else cluster checks for moves where the
 		//pawn is simply moving forward, and not diagonally
 		if(color.equals("white"))
 		{
-			if((Y2 - Y) > 2 || (Y2 - Y) <= 0)
+			if((y2 - y) > 2 || (y2 - y) <= 0)
 				return false;
-			if(X != X2) //en passant check
+			if(x != x2) //en passant check
 			{
-				if(board[X2][Y2] != null)
+				if(board[x2][y2] != null)
 					return true;
-				else if(((X2 - X) > 0) && board[X+1][Y] instanceof Pawn 
-						&& board[X+1][Y].hasMoved2)
+				else if(((x2 - x) > 0) && board[x+1][y] instanceof Pawn 
+						&& board[x+1][y].hasMoved2)
 							return true;
-				else if(((X - X2) > 0) && board[X+1][Y] instanceof Pawn 
-						&& board[X-1][Y].hasMoved2)
+				else if(((x - x2) > 0) && board[x+1][y] instanceof Pawn 
+						&& board[x-1][y].hasMoved2)
 							return true;
 			}
-			if(hasMoved && (Y2 - Y) > 1)
+			if(hasMoved && (y2 - y) > 1)
 				return false;
 			return true;
 		} else
 		{
-			if((Y - Y2) > 2 || (Y - Y2) <= 0)
+			if((y - y2) > 2 || (y - y2) <= 0)
 				return false;
-			if(X != X2) //en passant check
+			if(x != x2) //en passant check
 			{
-				if(board[X2][Y2] != null)
+				if(board[x2][y2] != null)
 					return true;
-				else if(((X2 - X) > 0) && board[X+1][Y] instanceof Pawn 
-						&& board[X+1][Y].hasMoved2)
+				else if(((x2 - x) > 0) && board[x+1][y] instanceof Pawn 
+						&& board[x+1][y].hasMoved2)
 							return true;
-				else if(((X - X2) > 0) && board[X+1][Y] instanceof Pawn 
-						&& board[X-1][Y].hasMoved2)
+				else if(((x - x2) > 0) && board[x+1][y] instanceof Pawn 
+						&& board[x-1][y].hasMoved2)
 							return true;
 			}
-			if(hasMoved && (Y - Y2) > 1)
+			if(hasMoved && (y - y2) > 1)
 				return false;
 			return true;
 		}
