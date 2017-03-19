@@ -85,17 +85,17 @@ public class Chess {
 				Piece toMove = board[startY][startX];
 				if(toMove != null)
 				{
-					if((moveType && toMove.color.equals("black")) || 
-							(!moveType && toMove.color.equals("white")))
+//					if((moveType && toMove.color.equals("black")) || 
+//							(!moveType && toMove.color.equals("white")))
+//					{
+//						System.out.println("Illegal move, try again");
+//						newTurn = false;
+//					}
+//					else
 					{
-						System.out.println("Illegal move, try again");
-						newTurn = false;
-					}
-					else
-					{
-						if(toMove.tryMove(endX, endY, board))
+						if(toMove.tryMove(endX, endY))
 						{
-							toMove.move(endX, endY, board);
+							toMove.move(endX, endY);
 							newTurn = true;
 							moveType = !moveType;
 

@@ -10,6 +10,7 @@ public abstract class Piece {
 
 	String color;
 	int x, y;
+	Piece[][]board;
 	boolean hasMoved = false;
 	boolean hasMoved2 = false;
 
@@ -20,7 +21,7 @@ public abstract class Piece {
 	 * @param board board the piece tries to move to
 	 * @return whether piece can move to desired position
 	 */
-	public abstract boolean tryMove(int x2, int y2, Piece[][] board);
+	public abstract boolean tryMove(int x2, int y2);
 	
 	/**
 	 * Moves piece to position
@@ -28,7 +29,7 @@ public abstract class Piece {
 	 * @param y y position to move to
 	 * @param board board the piece moves on
 	 */
-	public abstract void move(int x, int y, Piece[][] board);
+	public abstract void move(int x, int y);
 	
 	/**
 	 * Constructor of Piece class
@@ -36,10 +37,11 @@ public abstract class Piece {
 	 * @param x starting x position 
 	 * @param y starting y position
 	 */
-	public Piece(String color, int x, int y){
+	public Piece(String color, int x, int y, Piece[][] board){
 		this.color = color;
 		this.x = x;
 		this.y = y;
+		this.board = board;
 	}
 	
 	/**
@@ -48,7 +50,7 @@ public abstract class Piece {
 	 * Essentially, initial try move check that is common for all pieces
 	 * @return preliminary determination of if piece can move to location
 	 */
-	protected boolean tryMoveInit(int x2, int y2, Piece[][] board)
+	protected boolean tryMoveInit(int x2, int y2)
 	{
 		if(x2 > 7 || x2 < 0)
 			return false;

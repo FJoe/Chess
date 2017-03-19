@@ -22,14 +22,29 @@ public class Board
 		
 		for(int i = 0; i < 8; i++)
 		{
-			board[1][i] = new Pawn("black", 1, i);
-			board[6][i] = new Pawn("white", 6, i);
+			board[1][i] = new Pawn("black", 1, i, board);
+			board[6][i] = new Pawn("white", 6, i, board);
 		}
-		board[0][0] = new Rook("black", 0, 0);
-		board[0][7] = new Rook("black", 7, 0);
-		board[7][0] = new Rook("white", 0, 7);
-		board[7][7] = new Rook("white", 7, 7);
+		board[0][0] = new Rook("black", 0, 0, board);
+		board[0][7] = new Rook("black", 7, 0, board);
+		board[7][0] = new Rook("white", 0, 7, board);
+		board[7][7] = new Rook("white", 7, 7, board);
+		
+		board[0][1] = new Knight("black", 1, 0, board);
+		board[0][6] = new Knight("black", 6, 0, board);
+		board[7][1] = new Knight("white", 1, 7, board);
+		board[7][6] = new Knight("white", 6, 7, board);
 
+		board[0][2] = new Bishop("black", 2, 0, board);
+		board[0][5] = new Bishop("black", 5, 0, board);
+		board[7][2] = new Bishop("white", 2, 7, board);
+		board[7][5] = new Bishop("white", 2, 7, board);
+		
+		board[0][3] = new Queen("black", 3, 0, board);
+		board[7][3] = new Queen("white", 3, 7, board);
+		
+		board[0][4] = new King("black", 4, 0, board);
+		board[7][4] = new King("white", 4, 7, board);
 	}
 	
 	/**

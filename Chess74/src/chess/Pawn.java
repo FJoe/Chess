@@ -16,13 +16,13 @@ public class Pawn extends Piece
 	 * @param x starting x position
 	 * @param y starting y position
 	 */
-	public Pawn(String color, int x, int y)
+	public Pawn(String color, int x, int y, Piece[][] board)
 	{
-		super(color, x, y);
+		super(color, x, y, board);
 	}
 
 	
-	public void move(int x, int y, Piece[][] board)
+	public void move(int x, int y)
 	{
 		hasMoved = true;
 		this.x = x;
@@ -34,9 +34,9 @@ public class Pawn extends Piece
 		else hasMoved2 = false;
 	}
 	
-	public boolean tryMove(int x2, int y2, Piece[][] board)
+	public boolean tryMove(int x2, int y2)
 	{
-		if(!tryMoveInit(x2,y2,board))
+		if(!tryMoveInit(x2,y2))
 			return false;
 		
 		//This if-else cluster checks for moves where the
