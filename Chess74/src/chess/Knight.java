@@ -13,7 +13,7 @@ public class Knight extends Piece
 	 * @param x starting x position
 	 * @param y starting y position
 	 */
-	public Knight(String color, int x, int y, Piece[][] board) {
+	public Knight(String color, int x, int y, Board board) {
 		super(color, x, y, board);
 	}
 
@@ -29,14 +29,6 @@ public class Knight extends Piece
 			return true;
 		
 		return false;
-	}
-
-	public void move(int x, int y) {
-		board[this.y][this.x] = null;
-		hasMoved = true;
-		this.x = x;
-		this.y = y;
-		board[y][x] = this;
 	}
 	
 	public String toString()

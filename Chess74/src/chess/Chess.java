@@ -10,6 +10,8 @@ package chess;
 import java.util.Scanner;
 
 public class Chess {
+	
+	private static Board game;
 
 	/**
 	 * Initiates playGame()
@@ -26,7 +28,7 @@ public class Chess {
 	 */
 	public static void playGame()
 	{
-		Board game = new Board();
+		game = new Board();
 		Piece[][] board = game.board;
 
 		Scanner in = new Scanner(System.in);
@@ -47,7 +49,18 @@ public class Chess {
 		while(winner == -1)
 		{
 			if(newTurn)
+			{
 				game.printBoard();
+			
+				String otherTeam;
+				if(moveType)
+					otherTeam = "black";
+				else
+					otherTeam = "white";
+				if(isCheck(otherTeam))
+					System.out.println("Check");
+			}
+			
 			if(moveType)
 				System.out.println("White's move: ");
 			else
@@ -97,12 +110,14 @@ public class Chess {
 						{
 							toMove.move(endX, endY);
 							newTurn = true;
-							moveType = !moveType;
 
 							if(moveset[4] == 1)
 								draw = true;
 							else
 								draw = false;
+								
+							moveType = !moveType;
+
 						}
 						else
 						{
@@ -126,7 +141,38 @@ public class Chess {
 			System.out.println("White wins!");
 		else if(winner == 2)
 			System.out.println("Draw");
+		
+		in.close();
 	}//end playGame()
+	
+	/**
+	 * Check whether team in given parameter is in check
+	 * @param teamToCheck team to check
+	 * @return if in check or not
+	 */
+	private static boolean isCheck(String teamToCheck)
+	{
+		Piece thisKing;
+		Piece[] otherTeam;
+		
+		if(teamToCheck.equals("black"))
+		{
+			thisKing = game.blackPieces[Board.PIECESKINGPOS];
+			otherTeam = game.whitePieces;
+		}
+		else
+		{
+			thisKing = game.whitePieces[Board.PIECESKINGPOS];
+			otherTeam = game.blackPieces;
+		}
+			
+		for(int i = 0; i < 16; i++)
+			if(otherTeam[i] != null && otherTeam[i].tryMove(thisKing.x, thisKing.y))
+				return true;
+		
+		return false;
+	}
+	
 
 	/**
 	 * translateFileRank

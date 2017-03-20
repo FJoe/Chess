@@ -13,7 +13,7 @@ public class Queen extends Piece
 	 * @param x starting x position
 	 * @param y starting y position
 	 */
-	public Queen(String color, int x, int y, Piece[][] board) {
+	public Queen(String color, int x, int y, Board board) {
 		super(color, x, y, board);
 	}
 
@@ -21,6 +21,8 @@ public class Queen extends Piece
 	{
 		if(!tryMoveInit(x2,y2))
 			return false;
+		
+		Piece[][] board = this.board.board;
 		
 		if(this.x == x2){
 			int init;
@@ -41,6 +43,7 @@ public class Queen extends Piece
 				if(board[i][x2] != null)
 					return false;
 			}
+			return true;
 		}
 		else if(this.y == y2)
 		{
@@ -60,11 +63,12 @@ public class Queen extends Piece
 			for(int i = init; i < end; i++)
 				if(board[y2][i] != null)
 					return false;
+			return true;
 		}
 		
 		int xDif = Math.abs(x2 - this.x);
 		int yDif = Math.abs(y2 - this.y);
-		
+				
 		if(xDif == yDif)
 		{		
 			int xStart;
@@ -83,16 +87,9 @@ public class Queen extends Piece
 			for(int i = 1; i < xDif; i++)
 				if(board[yStart + i][xStart + i] != null)
 					return false;
+			return true;
 		}
-		return true;
-	}
-
-	public void move(int x, int y) {
-		board[this.y][this.x] = null;
-		hasMoved = true;
-		this.x = x;
-		this.y = y;
-		board[y][x] = this;
+		return false;
 	}
 	
 	public String toString()

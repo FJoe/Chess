@@ -16,7 +16,7 @@ public class Pawn extends Piece
 	 * @param x starting x position
 	 * @param y starting y position
 	 */
-	public Pawn(String color, int x, int y, Piece[][] board)
+	public Pawn(String color, int x, int y, Board board)
 	{
 		super(color, x, y, board);
 	}
@@ -38,6 +38,8 @@ public class Pawn extends Piece
 	{
 		if(!tryMoveInit(x2,y2))
 			return false;
+		
+		Piece[][] board = this.board.board;
 		
 		//This if-else cluster checks for moves where the
 		//pawn is simply moving forward, and not diagonally

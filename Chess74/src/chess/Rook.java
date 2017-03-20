@@ -12,7 +12,7 @@ public class Rook extends Piece
 	 * @param x starting x position
 	 * @param y starting y position
 	 */
-	public Rook(String color, int x, int y, Piece[][] board){
+	public Rook(String color, int x, int y, Board board){
 		super(color, x, y, board);
 	}
 
@@ -20,6 +20,8 @@ public class Rook extends Piece
 	public boolean tryMove(int x2, int y2) {
 		if(!tryMoveInit(x2,y2))
 			return false;
+		
+		Piece[][] board = this.board.board;
 		
 		//Checks if another piece is in between start and end positions
 		if(this.x == x2){
@@ -69,15 +71,6 @@ public class Rook extends Piece
 		}
 		
 		return true;
-	}
-
-	public void move(int x, int y) 
-	{
-		board[this.y][this.x] = null;
-		hasMoved = true;
-		this.x = x;
-		this.y = y;
-		board[y][x] = this;
 	}
 	
 	public String toString()

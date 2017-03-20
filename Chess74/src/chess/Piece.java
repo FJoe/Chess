@@ -10,7 +10,7 @@ public abstract class Piece {
 
 	String color;
 	int x, y;
-	Piece[][]board;
+	Board board;
 	boolean hasMoved = false;
 	boolean hasMoved2 = false;
 
@@ -29,7 +29,19 @@ public abstract class Piece {
 	 * @param y y position to move to
 	 * @param board board the piece moves on
 	 */
-	public abstract void move(int x, int y);
+	public void move(int x, int y)
+	{
+		Piece[][] board = this.board.board;
+		board[this.y][this.x] = null;
+		hasMoved = true;
+		this.x = x;
+		this.y = y;
+		
+		if(board[y][x] != null)
+			board[y][x].remove();
+		
+		board[y][x] = this;
+	}
 	
 	/**
 	 * Constructor of Piece class
@@ -37,7 +49,7 @@ public abstract class Piece {
 	 * @param x starting x position 
 	 * @param y starting y position
 	 */
-	public Piece(String color, int x, int y, Piece[][] board){
+	public Piece(String color, int x, int y, Board board){
 		this.color = color;
 		this.x = x;
 		this.y = y;
@@ -60,8 +72,30 @@ public abstract class Piece {
 		if(this.x == x2 && this.y == y2)
 			return false;
 		
+		Piece[][] board = this.board.board;
+		
 		if(board[y2][x2] != null && board[y2][x2].color.equals(this.color))
 			return false;
 		return true;
+	}
+	
+	/**
+	 * Removes this piece from the team's pieces
+	 */
+	protected void remove()
+	{
+		Piece[] removingFrom;
+		if(this.color.equals("black"))
+			removingFrom = board.blackPieces;
+		else
+			removingFrom = board.whitePieces;
+		
+		
+		for(int i = 0; i < 16; i++)
+			if(removingFrom[i] == this)
+			{
+				removingFrom[i] = null;
+				return;
+			}
 	}
 }

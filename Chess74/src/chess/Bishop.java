@@ -13,7 +13,7 @@ public class Bishop extends Piece
 	 * @param x starting x position
 	 * @param y starting y position
 	 */
-	public Bishop(String color, int x, int y, Piece[][] board) {
+	public Bishop(String color, int x, int y, Board board) {
 		super(color, x, y, board);
 	}
 
@@ -41,19 +41,13 @@ public class Bishop extends Piece
 		else
 			yStart = this.y;
 		
+		Piece[][] board = this.board.board;
+		
 		for(int i = 1; i < xDif; i++)
 			if(board[yStart + i][xStart + i] != null)
 				return false;
 		
 		return true;
-	}
-
-	public void move(int x, int y) {
-		board[this.y][this.x] = null;
-		hasMoved = true;
-		this.x = x;
-		this.y = y;
-		board[y][x] = this;
 	}
 	
 	public String toString()
