@@ -44,22 +44,9 @@ public abstract class Piece {
 	}
 	
 	/**
-	 * Constructor of Piece class
-	 * @param color Whether piece is black or white
-	 * @param x starting x position 
-	 * @param y starting y position
-	 */
-	public Piece(String color, int x, int y, Board board){
-		this.color = color;
-		this.x = x;
-		this.y = y;
-		this.board = board;
-	}
-	
-	/**
-	 * Checks whether position is out of bounds, the same position as current position, 
+	 * Checks whether position is out of bounds, if it the same as the current position, 
 	 * or if a piece on the same team resides at the position. 
-	 * Essentially, initial try move check that is common for all pieces
+	 * Essentially, tryMoveInit checks for illegal movement that is common for all pieces
 	 * @return preliminary determination of if piece can move to location
 	 */
 	protected boolean tryMoveInit(int x2, int y2)
@@ -97,5 +84,18 @@ public abstract class Piece {
 				removingFrom[i] = null;
 				return;
 			}
+	}
+	
+	/**
+	 * Constructor of Piece class
+	 * @param color Whether piece is black or white
+	 * @param x starting x position 
+	 * @param y starting y position
+	 */
+	public Piece(String color, int x, int y, Board board){
+		this.color = color;
+		this.x = x;
+		this.y = y;
+		this.board = board;
 	}
 }
