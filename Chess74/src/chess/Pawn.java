@@ -6,9 +6,6 @@ package chess;
 
 public class Pawn extends Piece
 {
-
-	boolean hasMoved = false;
-	//Tracks if the pawn JUST moved two spaces
 	
 	/**
 	 * Creates a Pawn piece
@@ -24,9 +21,8 @@ public class Pawn extends Piece
 	
 	public void move(int x, int y)
 	{
-		hasMoved = true;
-		this.x = x;
-		this.y = y;
+		super.move(x, y);
+
 		if(color.equals("white") && (this.y - y) == 2)
 			hasMoved2 = true;
 		else if(color.equals("black") && (y - this.y) == 2)
