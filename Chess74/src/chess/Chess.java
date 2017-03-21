@@ -53,11 +53,20 @@ public class Chess {
 				game.printBoard();
 			
 				String otherTeam;
+				Piece[] thisTeam;
+				Piece[] opponentTeam;
+				
 				if(moveType)
-					otherTeam = "black";
+				{
+					thisTeam = game.whitePieces;
+					opponentTeam = game.blackPieces;
+				}
 				else
-					otherTeam = "white";
-				if(isCheck(otherTeam))
+				{
+					thisTeam = game.blackPieces;
+					opponentTeam = game.whitePieces;
+				}
+				if(isCheck(thisTeam, opponentTeam))
 					System.out.println("Check");
 			}
 			
@@ -106,7 +115,7 @@ public class Chess {
 //					}
 //					else
 					{
-						if(toMove.tryMove(endX, endY))
+						if(toMove.tryMove(endX, endY) && !wouldBeCheck(toMove, endX, endY))
 						{
 							toMove.move(endX, endY);
 							newTurn = true;
@@ -150,27 +159,67 @@ public class Chess {
 	 * @param teamToCheck team to check
 	 * @return if in check or not
 	 */
-	private static boolean isCheck(String teamToCheck)
+	static boolean isCheck(Piece[] teamToCheck, Piece[] opponentTeam)
 	{
-		Piece thisKing;
-		Piece[] otherTeam;
+		Piece thisKing = teamToCheck[Board.PIECESKINGPOS];
+			
+		for(int i = 0; i < 16; i++)
+			if(opponentTeam[i] != null && opponentTeam[i].tryMove(thisKing.x, thisKing.y))
+				return true;
 		
-		if(teamToCheck.equals("black"))
+		return false;
+	}
+	
+	/**
+	 * Checks if the given piece is moved to x2,y2 then if its team will be in check
+	 * @param toMove piece to move
+	 * @param x2 x position to move to
+	 * @param y2 y position to move to
+	 * @return if team is in check if it moves given piee to x2,y2
+	 */
+	static boolean wouldBeCheck(Piece toMove, int x2, int y2)
+	{
+		Piece[] teamScenario;
+		Piece[] otherTeam;
+		if(toMove.color.equals("black"))
 		{
-			thisKing = game.blackPieces[Board.PIECESKINGPOS];
+			teamScenario = game.blackPieces;
 			otherTeam = game.whitePieces;
 		}
 		else
 		{
-			thisKing = game.whitePieces[Board.PIECESKINGPOS];
+			teamScenario = game.whitePieces;
 			otherTeam = game.blackPieces;
 		}
-			
-		for(int i = 0; i < 16; i++)
-			if(otherTeam[i] != null && otherTeam[i].tryMove(thisKing.x, thisKing.y))
-				return true;
 		
-		return false;
+		Piece wasRemoved = game.board[y2][x2];
+		int origX = toMove.x;
+		int origY = toMove.y;
+		boolean hasMovedPrev = toMove.hasMoved;
+		boolean hasMoved2Prev = toMove.hasMoved2;
+		
+		Piece rookCastling;
+		if(toMove instanceof King && ((King)toMove).canCastle(x2, y2))
+		{
+			
+		}
+		
+		toMove.move(x2, y2);
+		boolean toReturn = isCheck(teamScenario, otherTeam);
+		
+
+		
+		toMove.move(origX, origY);
+		toMove.hasMoved = hasMovedPrev;
+		toMove.hasMoved2 = hasMoved2Prev;
+		game.board[y2][x2] = wasRemoved;
+		int i = 0;
+		while(i < 16 && otherTeam[i] != null)
+			i++;
+		if(i < 16)
+			otherTeam[i] = wasRemoved;
+		
+		return toReturn;	
 	}
 	
 
@@ -182,7 +231,7 @@ public class Chess {
 	 * @param oldFR inputed file/rank
 	 * @return int[] appropriate row/column for board and whether draw is called
 	 */
-	public static int[] translateFileRank(String oldFR)
+	static int[] translateFileRank(String oldFR)
 	{
 		int[] newFR = new int[5];
 		newFR[0] = ((int) oldFR.charAt(0)) - 97;

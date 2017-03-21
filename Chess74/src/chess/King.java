@@ -56,13 +56,38 @@ public class King extends Piece
 		super.move(x2, y2);
 	}
 	
-	private boolean canCastle(int x2, int y2)
+	/**
+	 * Checks if piece can commence castling at this location
+	 * @param x2 x position for castling
+	 * @param y2 y position for castling
+	 * @return if this king cas castle to this location
+	 */
+	public boolean canCastle(int x2, int y2)
 	{
 		if(hasMoved)
 			return false;
 		if(y2 != y)
 			return false;
+		if(Math.abs(x2 - x) > 2)
+			return false;
 		Piece[][] board = this.board.board;
+		
+		Piece[] thisTeam;
+		Piece[] otherTeam;
+		if(this.color.equals("black"))
+		{
+			thisTeam = super.board.blackPieces;
+			otherTeam = super.board.whitePieces;
+		}
+		else
+		{
+			thisTeam = super.board.whitePieces;
+			otherTeam = super.board.blackPieces;
+		}
+		
+		if(Chess.isCheck(thisTeam, otherTeam))
+			return false;
+		
 		Piece rookToMove;
 
 		if(x > x2)
