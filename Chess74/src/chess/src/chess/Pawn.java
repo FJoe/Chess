@@ -27,35 +27,38 @@ public class Pawn extends Piece
 		hasMoved = true;
 		this.x = x;
 		this.y = y;
-		if(color.equals("white") && (y - this.y) == 2)
+		if(color.equals("white") && (this.y - y) == 2)
 			hasMoved2 = true;
-		else if(color.equals("black") && (this.y - y) == 2)
+		else if(color.equals("black") && (y - this.y) == 2)
 			hasMoved2 = true;
 		else hasMoved2 = false;
+		
 	}
 	
 	public boolean tryMove(int x2, int y2)
 	{
 		if(!tryMoveInit(x2,y2))
 			return false;
-		
+
 		Piece[][] board = this.board.board;
 		
 		//This if-else cluster checks for moves where the
 		//pawn is simply moving forward, and not diagonally
-		if(color.equals("white"))
+		if(color.equals("black"))
 		{
 			if((y2 - y) > 2 || (y2 - y) <= 0)
+			{
 				return false;
+			}
 			if(x != x2) //en passant check
 			{
-				if(board[x2][y2] != null)
+				if(board[y2][x2] != null)
 					return true;
-				else if(((x2 - x) > 0) && board[x+1][y] instanceof Pawn 
-						&& board[x+1][y].hasMoved2)
+				else if(((x2 - x) > 0) && board[y][x+1] instanceof Pawn 
+						&& board[y][x+1].hasMoved2)
 							return true;
-				else if(((x - x2) > 0) && board[x+1][y] instanceof Pawn 
-						&& board[x-1][y].hasMoved2)
+				else if(((x - x2) > 0) && board[y][x+1] instanceof Pawn 
+						&& board[y][x-1].hasMoved2)
 							return true;
 			}
 			if(hasMoved && (y2 - y) > 1)
@@ -67,13 +70,13 @@ public class Pawn extends Piece
 				return false;
 			if(x != x2) //en passant check
 			{
-				if(board[x2][y2] != null)
+				if(board[y2][x2] != null)
 					return true;
-				else if(((x2 - x) > 0) && board[x+1][y] instanceof Pawn 
+				else if(((x2 - x) > 0) && board[y][x+1] instanceof Pawn 
 						&& board[x+1][y].hasMoved2)
 							return true;
-				else if(((x - x2) > 0) && board[x+1][y] instanceof Pawn 
-						&& board[x-1][y].hasMoved2)
+				else if(((x - x2) > 0) && board[y][x+1] instanceof Pawn 
+						&& board[y][x-1].hasMoved2)
 							return true;
 			}
 			if(hasMoved && (y - y2) > 1)
