@@ -67,7 +67,18 @@ public class Chess {
 					opponentTeam = game.whitePieces;
 				}
 				if(isCheck(thisTeam, opponentTeam))
-					System.out.println("Check");
+				{
+					if(isCheckmate(thisTeam, opponentTeam))
+					{
+						if(moveType)
+							winner = 0;
+						else
+							winner = 1;
+						System.out.println("Checkmate");
+					}
+					else
+						System.out.println("Check");
+				}
 			}
 			
 			if(moveType)
@@ -155,19 +166,31 @@ public class Chess {
 	}//end playGame()
 	
 	/**
-	 * Check whether team in given parameter is in check
-	 * @param teamToCheck team to check
+	 * Checks whether teamToCheck is in check to opponentTeam
+	 * @param teamToCheck The team to check
+	 * @param opponentTeam the other team
 	 * @return if in check or not
 	 */
 	static boolean isCheck(Piece[] teamToCheck, Piece[] opponentTeam)
 	{
+		return getCheckingPiece(teamToCheck, opponentTeam) != null;
+	}
+	
+	/**
+	 * Returns the opponent piece that is putting current team in check
+	 * @param teamToCheck current team
+	 * @param opponentTeam other team
+	 * @return returns piece putting team in check. else return null
+	 */
+	private static Piece getCheckingPiece(Piece[] teamToCheck, Piece[] opponentTeam)
+	{
 		Piece thisKing = teamToCheck[Board.PIECESKINGPOS];
-			
+		
 		for(int i = 0; i < 16; i++)
 			if(opponentTeam[i] != null && opponentTeam[i].tryMove(thisKing.x, thisKing.y))
-				return true;
+				return opponentTeam[i];
 		
-		return false;
+		return null;
 	}
 	
 	/**
@@ -198,14 +221,28 @@ public class Chess {
 		boolean hasMovedPrev = toMove.hasMoved;
 		boolean hasMoved2Prev = toMove.hasMoved2;
 		
-		Piece rookCastling;
+		boolean toReturn;
+		
+		Piece rookCastling = null;
+		int rookOrigX = 0;
 		if(toMove instanceof King && ((King)toMove).canCastle(x2, y2))
 		{
-			
+			if(toMove.x > x2)
+				rookCastling = game.board[y2][0];
+			else
+				rookCastling = game.board[y2][7];
+			rookOrigX = rookCastling.x;
 		}
+			
+			toMove.move(x2, y2);
+			toReturn = isCheck(teamScenario, otherTeam);
+			
 		
-		toMove.move(x2, y2);
-		boolean toReturn = isCheck(teamScenario, otherTeam);
+		if(rookCastling != null)
+		{
+			rookCastling.move(rookOrigX, y2);
+			rookCastling.hasMoved = false;
+		}
 		
 
 		
@@ -213,15 +250,37 @@ public class Chess {
 		toMove.hasMoved = hasMovedPrev;
 		toMove.hasMoved2 = hasMoved2Prev;
 		game.board[y2][x2] = wasRemoved;
-		int i = 0;
-		while(i < 16 && otherTeam[i] != null)
-			i++;
-		if(i < 16)
+		if(wasRemoved != null)
+		{
+			int i = 0;
+			while(i < 16 && otherTeam[i] != null)
+				i++;
 			otherTeam[i] = wasRemoved;
-		
+		}
 		return toReturn;	
 	}
-	
+
+	static boolean isCheckmate(Piece[] teamToCheck, Piece[] opponentTeam)
+	{
+		Piece king = teamToCheck[Board.PIECESKINGPOS];
+		//Checks if king can move to spot that wouldn't be in check
+		for(int x = king.x - 1; x < king.x + 2; x++)
+			for(int y = king.y - 1; y < king.y + 2; y++)
+				if(king.tryMove(x,y) && !wouldBeCheck(king, x, y))
+					return false;
+		
+		//Checks if any piece can attack piece putting team in check
+		Piece attackingPiece = getCheckingPiece(teamToCheck, opponentTeam);
+		for(int i = 0; i < 16; i++)
+			if(teamToCheck[i].tryMove(attackingPiece.x, attackingPiece.y) &&
+					!wouldBeCheck(teamToCheck[i], attackingPiece.x, attackingPiece.y))
+				return false;
+		
+		//Checks if a piece can block the attacking piece
+		
+		
+		return true;
+	}
 
 	/**
 	 * translateFileRank
