@@ -23,11 +23,11 @@ public class Board
 		
 		board = new Piece[8][8];
 		
-//		for(int i = 0; i < 8; i++)
-//		{
-//			board[1][i] = new Pawn("black", i, 1, this);
-//			board[6][i] = new Pawn("white", i, 6, this);
-//		}
+		for(int i = 0; i < 8; i++)
+		{
+			board[1][i] = new Pawn("black", i, 1, this);
+			board[6][i] = new Pawn("white", i, 6, this);
+		}
 		board[0][0] = new Rook("black", 0, 0, this);
 		board[0][7] = new Rook("black", 7, 0, this);
 		board[7][0] = new Rook("white", 0, 7, this);

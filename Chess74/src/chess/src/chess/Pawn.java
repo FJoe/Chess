@@ -29,10 +29,6 @@ public class Pawn extends Piece
 			hasMoved2 = true;
 		else hasMoved2 = false;
 		
-		if(color.equals("white") && y == 0)
-			;//WHITE PICKS WHAT PAWN BECOMES
-		else if(color.equals("black") && y == 7)
-			;//BLACK PICKS WHAT PAWN BECOMES
 	}
 	
 	public boolean tryMove(int x2, int y2)
