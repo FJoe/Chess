@@ -28,23 +28,23 @@ public class Bishop extends Piece
 		if(xDif != yDif)
 			return false;
 		
-		int xStart;
-		int yStart;
-		
-		if(x2 < this.x)
-			xStart = x2;
+		int startX = this.x;
+		int startY = this.y;
+		int incX, incY;
+
+		if(this.x > x2)
+			incX = -1;
 		else
-			xStart = this.x;
-		
-		if(y2 < this.y)
-			yStart = y2;
-		else
-			yStart = this.y;
+			incX = 1;
+		if(this.y > y2)
+			incY = -1;
+		else 
+			incY = 1;
 		
 		Piece[][] board = this.board.board;
 		
 		for(int i = 1; i < xDif; i++)
-			if(board[yStart + i][xStart + i] != null)
+			if(board[startY + (incY * i)][startX + (incX * i)] != null)
 				return false;
 		
 		return true;
