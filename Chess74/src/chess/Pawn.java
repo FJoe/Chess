@@ -47,18 +47,16 @@ public class Pawn extends Piece
 		if(color.equals("black"))
 		{
 			if((y2 - y) > 2 || (y2 - y) <= 0)
-			{
 				return false;
-			}
-			if(x != x2) //en passant check
+			if(Math.abs(x - x2) == 1 && (y2 - y) == 1) //en passant check
 			{
 				if(board[y2][x2] != null)
 					return true;
-				else if(((x2 - x) > 0) && board[y][x+1] instanceof Pawn 
-						&& board[y][x+1].hasMoved2)
+				else if(((x2 - x) > 0) && board[y][x+1] != null &&
+						board[y][x+1] instanceof Pawn && board[y][x+1].hasMoved2)
 							return true;
-				else if(((x - x2) > 0) && board[y][x+1] instanceof Pawn 
-						&& board[y][x-1].hasMoved2)
+				else if(((x - x2) > 0) && board[y][x-1] != null &&
+						board[y][x-1] instanceof Pawn && board[y][x-1].hasMoved2)
 							return true;
 				else
 					return false;
@@ -72,15 +70,15 @@ public class Pawn extends Piece
 		{
 			if((y - y2) > 2 || (y - y2) <= 0)
 				return false;
-			if(x != x2) //en passant check
+			if(Math.abs(x - x2) == 1 && (y - y2 == 1)) //en passant check
 			{
 				if(board[y2][x2] != null)
 					return true;
-				else if(((x2 - x) > 0) && board[y][x+1] instanceof Pawn 
-						&& board[x+1][y].hasMoved2)
+				else if(((x2 - x) > 0) && board[y][x+1] != null &&
+						board[y][x+1] instanceof Pawn && board[y][x+1].hasMoved2)
 							return true;
-				else if(((x - x2) > 0) && board[y][x+1] instanceof Pawn 
-						&& board[y][x-1].hasMoved2)
+				else if(((x - x2) > 0) && board[y][x-1] != null &&
+						board[y][x-1] instanceof Pawn && board[y][x-1].hasMoved2)
 							return true;
 				else
 					return false;
