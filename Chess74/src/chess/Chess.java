@@ -10,7 +10,7 @@ package chess;
 import java.util.Scanner;
 
 public class Chess {
-	
+
 	private static Board game;
 
 	/**
@@ -44,43 +44,13 @@ public class Chess {
 		int winner = -1;
 
 		boolean draw = false;
-		boolean newTurn = true;
 
+		game.printBoard();
+		
 		while(winner == -1)
 		{
-			if(newTurn)
-			{
-				game.printBoard();
-			
-				String otherTeam;
-				Piece[] thisTeam;
-				Piece[] opponentTeam;
-				
-				if(moveType)
-				{
-					thisTeam = game.whitePieces;
-					opponentTeam = game.blackPieces;
-				}
-				else
-				{
-					thisTeam = game.blackPieces;
-					opponentTeam = game.whitePieces;
-				}
-				if(isCheck(thisTeam, opponentTeam))
-				{
-					if(isCheckmate(thisTeam, opponentTeam))
-					{
-						if(moveType)
-							winner = 0;
-						else
-							winner = 1;
-						System.out.println("Checkmate");
-					}
-					else
-						System.out.println("Check");
-				}
-			}
-			
+
+
 			if(moveType)
 				System.out.println("White's move: ");
 			else
@@ -103,7 +73,6 @@ public class Chess {
 				else
 				{
 					System.out.println("Illegal move, try again");
-					newTurn = false;
 				}
 			}
 
@@ -118,42 +87,70 @@ public class Chess {
 				Piece toMove = board[startY][startX];
 				if(toMove != null)
 				{
-//					if((moveType && toMove.color.equals("black")) || 
-//							(!moveType && toMove.color.equals("white")))
-//					{
-//						System.out.println("Illegal move, try again");
-//						newTurn = false;
-//					}
-//					else
+					//					if((moveType && toMove.color.equals("black")) || 
+					//							(!moveType && toMove.color.equals("white")))
+					//					{
+					//						System.out.println("Illegal move, try again");
+					//						newTurn = false;
+					//					}
+					//					else
 					{
 						if(toMove.tryMove(endX, endY) && !wouldBeCheck(toMove, endX, endY))
 						{
 							toMove.move(endX, endY);
-							newTurn = true;
+							game.printBoard();
 
 							if(moveset[4] == 1)
 								draw = true;
 							else
 								draw = false;
-								
+
 							moveType = !moveType;
 
+							if(pawnCanMorph(game.board) != null)
+								morphPawn(pawnCanMorph(game.board), input, game);
+
+							Piece[] thisTeam;
+							Piece[] opponentTeam;
+
+							if(moveType)
+							{
+								thisTeam = game.whitePieces;
+								opponentTeam = game.blackPieces;
+							}
+							else
+							{
+								thisTeam = game.blackPieces;
+								opponentTeam = game.whitePieces;
+							}
+
+							if(isCheck(thisTeam, opponentTeam))
+							{
+								if(isCheckmate(thisTeam, opponentTeam))
+								{
+									if(moveType)
+										winner = 0;
+									else
+										winner = 1;
+									System.out.println("Checkmate");
+								}
+								else
+									System.out.println("Check");
+							}
 						}
 						else
 						{
 							System.out.println("Illegal move, try again");
-							newTurn = false;
 						}					}
 				}
 				else
 				{
 					System.out.println("Illegal move, try again");
-					newTurn = false;
 				}
-				
-				if(pawnCanMorph(game.board) != null)
-					morphPawn(pawnCanMorph(game.board), input, game);
+
+
 			}
+
 		}
 
 		//end while loop
@@ -164,10 +161,10 @@ public class Chess {
 			System.out.println("White wins!");
 		else if(winner == 2)
 			System.out.println("Draw");
-		
+
 		in.close();
 	}//end playGame()
-	
+
 	/**
 	 * Checks if a pawn has made it across the board
 	 * @param board to evaluate
@@ -182,7 +179,7 @@ public class Chess {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Morphs pawn that makes it across the board
 	 * into the type of piece the user requests.
@@ -205,7 +202,7 @@ public class Chess {
 		else
 			pawn = new Queen(pawn.color, pawn.x, pawn.y, board);
 	}
-	
+
 	/**
 	 * Checks whether teamToCheck is in check to opponentTeam
 	 * @param teamToCheck The team to check
@@ -216,7 +213,7 @@ public class Chess {
 	{
 		return getCheckingPiece(teamToCheck, opponentTeam) != null;
 	}
-	
+
 	/**
 	 * Returns the opponent piece that is putting current team in check
 	 * @param teamToCheck current team
@@ -226,14 +223,14 @@ public class Chess {
 	private static Piece getCheckingPiece(Piece[] teamToCheck, Piece[] opponentTeam)
 	{
 		Piece thisKing = teamToCheck[Board.PIECESKINGPOS];
-		
+
 		for(int i = 0; i < 16; i++)
 			if(opponentTeam[i] != null && opponentTeam[i].tryMove(thisKing.x, thisKing.y))
 				return opponentTeam[i];
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Checks if the given piece is moved to x2,y2 then if its team will be in check
 	 * @param toMove piece to move
@@ -255,15 +252,15 @@ public class Chess {
 			teamScenario = game.whitePieces;
 			otherTeam = game.blackPieces;
 		}
-		
+
 		Piece wasRemoved = game.board[y2][x2];
 		int origX = toMove.x;
 		int origY = toMove.y;
 		boolean hasMovedPrev = toMove.hasMoved;
 		boolean hasMoved2Prev = toMove.hasMoved2;
-		
+
 		boolean toReturn;
-		
+
 		Piece rookCastling = null;
 		int rookOrigX = 0;
 		if(toMove instanceof King && ((King)toMove).canCastle(x2, y2))
@@ -274,19 +271,19 @@ public class Chess {
 				rookCastling = game.board[y2][7];
 			rookOrigX = rookCastling.x;
 		}
-			
-			toMove.move(x2, y2);
-			toReturn = isCheck(teamScenario, otherTeam);
-			
-		
+
+		toMove.move(x2, y2);
+		toReturn = isCheck(teamScenario, otherTeam);
+
+
 		if(rookCastling != null)
 		{
 			rookCastling.move(rookOrigX, y2);
 			rookCastling.hasMoved = false;
 		}
-		
 
-		
+
+
 		toMove.move(origX, origY);
 		toMove.hasMoved = hasMovedPrev;
 		toMove.hasMoved2 = hasMoved2Prev;
@@ -315,20 +312,57 @@ public class Chess {
 			for(int y = king.y - 1; y < king.y + 2; y++)
 				if(king.tryMove(x,y) && !wouldBeCheck(king, x, y))
 					return false;
-		
+
 		//Checks if any piece can attack piece putting team in check
 		Piece attackingPiece = getCheckingPiece(teamToCheck, opponentTeam);
 		for(int i = 0; i < 16; i++)
-			if(teamToCheck[i].tryMove(attackingPiece.x, attackingPiece.y) &&
-					!wouldBeCheck(teamToCheck[i], attackingPiece.x, attackingPiece.y))
-				return false;
-		
+			if(teamToCheck[i] != null)
+				if(teamToCheck[i].tryMove(attackingPiece.x, attackingPiece.y) &&
+						!wouldBeCheck(teamToCheck[i], attackingPiece.x, attackingPiece.y))
+					return false;
+
 		//Checks if a piece can block the attacking piece
 		if(attackingPiece instanceof Knight)
 			return true;
-		
-		
-		
+
+		int startX = attackingPiece.x;
+		int startY = attackingPiece.y;
+		int endX = king.x;
+		int endY = king.y;
+		int incX, incY;
+
+		if(king.x > attackingPiece.x)
+			incX = 1;
+		else if (king.x < attackingPiece.x)
+			incX = -1;
+		else
+			incX = 0;
+		if(king.y > attackingPiece.y)
+			incY = 1;
+		else if (king.y < attackingPiece.y)
+			incY = -1;
+		else
+			incY = 0;
+
+		int end;
+		if(startX != endX)
+			end = endX - startX;
+		else
+			end = endY - startY;
+
+		for(int j = 1; j <= end; j++)
+		{
+			for(int i = 0; i < 16; i++)
+
+				if(teamToCheck[i] != null)
+					if(teamToCheck[i].tryMove(startX + (incX*j), startY + (incY*j)) && 
+							!wouldBeCheck(teamToCheck[i], startX + (incX*j), startY + (incY*j)))
+					{
+						return false;
+					}
+		}
+
+
 		return true;
 	}
 
