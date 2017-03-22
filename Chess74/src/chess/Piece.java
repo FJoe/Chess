@@ -3,7 +3,7 @@ package chess;
 /**
  * Abstract class that all pieces (ie Pawn, rook) all extend as they all share 
  * same constructors and methods
- * @authors Dillon Heyck and Francis Joe
+ *@author Dillon Heyck and Francis Joe
  *
  */
 public abstract class Piece {
@@ -16,9 +16,8 @@ public abstract class Piece {
 
 	/**
 	 * Sees if the piece can move to a position on a board
-	 * @param x x position to check
-	 * @param y y position to check
-	 * @param board board the piece tries to move to
+	 * @param x2 x position to check
+	 * @param y2 y position to check
 	 * @return whether piece can move to desired position
 	 */
 	public abstract boolean tryMove(int x2, int y2);
@@ -27,7 +26,6 @@ public abstract class Piece {
 	 * Moves piece to position
 	 * @param x x position to move to
 	 * @param y y position to move to
-	 * @param board board the piece moves on
 	 */
 	public void move(int x, int y)
 	{
@@ -91,6 +89,7 @@ public abstract class Piece {
 	 * @param color Whether piece is black or white
 	 * @param x starting x position 
 	 * @param y starting y position
+	 * @param board board that piece is put on
 	 */
 	public Piece(String color, int x, int y, Board board){
 		this.color = color;

@@ -15,7 +15,7 @@ public class Chess {
 
 	/**
 	 * Initiates playGame()
-	 * @param args
+	 * @param args 
 	 */
 	public static void main(String[] args){
 
@@ -24,7 +24,7 @@ public class Chess {
 	}
 
 	/**
-	 * Prints board and takes input from next player
+	 * Creates a runs a game of chess
 	 */
 	public static void playGame()
 	{
@@ -260,6 +260,12 @@ public class Chess {
 		return toReturn;	
 	}
 
+	/**
+	 * Checks if teamToCheck is in checkmate
+	 * @param teamToCheck team to check if in checkmate
+	 * @param opponentTeam other team
+	 * @return returns if team to check is in checkmate
+	 */
 	static boolean isCheckmate(Piece[] teamToCheck, Piece[] opponentTeam)
 	{
 		Piece king = teamToCheck[Board.PIECESKINGPOS];
@@ -277,6 +283,9 @@ public class Chess {
 				return false;
 		
 		//Checks if a piece can block the attacking piece
+		if(attackingPiece instanceof Knight)
+			return true;
+		
 		
 		
 		return true;
