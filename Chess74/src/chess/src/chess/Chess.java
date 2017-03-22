@@ -150,6 +150,9 @@ public class Chess {
 					System.out.println("Illegal move, try again");
 					newTurn = false;
 				}
+				
+				if(pawnCanMorph(game.board) != null)
+					morphPawn(pawnCanMorph(game.board), input, game);
 			}
 		}
 
@@ -164,6 +167,44 @@ public class Chess {
 		
 		in.close();
 	}//end playGame()
+	
+	/**
+	 * Checks if a pawn has made it across the board
+	 * @param board to evaluate
+	 */
+	static Piece pawnCanMorph(Piece[][] board)
+	{
+		for(int i = 0; i < 8; i++){
+			if(board[0][i] instanceof Pawn && board[0][i].color.equals("white"))
+				return board[0][i];
+			if(board[7][i] instanceof Pawn && board[7][i].color.equals("black"))
+				return board[7][i];
+		}
+		return null;
+	}
+	
+	/**
+	 * Morphs pawn that makes it across the board
+	 * into the type of piece the user requests.
+	 * If no request is made, then the pawn becomes a
+	 * Queen by default
+	 * @param pawn the pawn to be changed
+	 * @param morphTo To specify what player wants
+	 * @param board to apply morph
+	 */
+	static void morphPawn(Piece pawn, String morphTo, Board board)
+	{
+		if(morphTo.endsWith("N"))
+			pawn = new Knight(pawn.color, pawn.x, pawn.y, board);
+		else if(morphTo.endsWith("R"))
+			pawn = new Rook(pawn.color, pawn.x, pawn.y, board);
+		else if(morphTo.endsWith("B"))
+			pawn = new Bishop(pawn.color, pawn.x, pawn.y, board);
+		else if(morphTo.endsWith("p"))
+			;
+		else
+			pawn = new Queen(pawn.color, pawn.x, pawn.y, board);
+	}
 	
 	/**
 	 * Checks whether teamToCheck is in check to opponentTeam

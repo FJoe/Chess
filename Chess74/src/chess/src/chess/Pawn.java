@@ -29,6 +29,10 @@ public class Pawn extends Piece
 			hasMoved2 = true;
 		else hasMoved2 = false;
 		
+		if(color.equals("white") && y == 0)
+			;//WHITE PICKS WHAT PAWN BECOMES
+		else if(color.equals("black") && y == 7)
+			;//BLACK PICKS WHAT PAWN BECOMES
 	}
 	
 	public boolean tryMove(int x2, int y2)
@@ -56,8 +60,12 @@ public class Pawn extends Piece
 				else if(((x - x2) > 0) && board[y][x+1] instanceof Pawn 
 						&& board[y][x-1].hasMoved2)
 							return true;
+				else
+					return false;
 			}
 			if(hasMoved && (y2 - y) > 1)
+				return false;
+			else if(board[y+1][x] != null)
 				return false;
 			return true;
 		} else
@@ -74,8 +82,12 @@ public class Pawn extends Piece
 				else if(((x - x2) > 0) && board[y][x+1] instanceof Pawn 
 						&& board[y][x-1].hasMoved2)
 							return true;
+				else
+					return false;
 			}
 			if(hasMoved && (y - y2) > 1)
+				return false;
+			if(board[y-1][x] != null)
 				return false;
 			return true;
 		}
