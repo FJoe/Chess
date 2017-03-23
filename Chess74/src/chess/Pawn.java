@@ -6,12 +6,12 @@ package chess;
 
 public class Pawn extends Piece
 {
-	
 	/**
 	 * Creates a Pawn piece
 	 * @param color Whether piece is black or white
 	 * @param x starting x position
 	 * @param y starting y position
+	 * @param board board the piece plays on
 	 */
 	public Pawn(String color, int x, int y, Board board)
 	{
@@ -19,16 +19,19 @@ public class Pawn extends Piece
 	}
 
 	
-	public void move(int x, int y)
+	public void move(int x2, int y2)
 	{
-		super.move(x, y);
-
-		if(color.equals("white") && (this.y - y) == 2)
+		if(Math.abs(this.y - y2) == 2)
 			hasMoved2 = true;
-		else if(color.equals("black") && (y - this.y) == 2)
-			hasMoved2 = true;
-		else hasMoved2 = false;
+		else 
+			hasMoved2 = false;
+		if(canEnpassant(x2,y2))
+		{
+			board.board[this.y][x2].remove();
+			board.board[this.y][x2] = null;
+		}
 		
+		super.move(x2, y2);
 	}
 	
 	public boolean tryMove(int x2, int y2)
@@ -38,54 +41,60 @@ public class Pawn extends Piece
 
 		Piece[][] board = this.board.board;
 		
-		//This if-else cluster checks for moves where the
-		//pawn is simply moving forward, and not diagonally
-		if(color.equals("black"))
+		int xDif = Math.abs(x2 - x);
+		int yDif = Math.abs(y2 - y);
+		
+		if(yDif > 2 || yDif <= 0)
+			return false;
+		if(xDif > 1)
+			return false;
+		
+		if(yDif == 2 && xDif == 1)
+			return false;
+		else if(yDif == 1 && xDif == 0)
+			return board[y2][x2] == null;
+		else if(yDif == 2)
 		{
-			if((y2 - y) > 2 || (y2 - y) <= 0)
-				return false;
-			if(Math.abs(x - x2) == 1 && (y2 - y) == 1) //en passant check
+			if(color.equals("black"))
 			{
-				if(board[y2][x2] != null)
-					return true;
-				else if(((x2 - x) > 0) && board[y][x+1] != null &&
-						board[y][x+1] instanceof Pawn && board[y][x+1].hasMoved2)
-							return true;
-				else if(((x - x2) > 0) && board[y][x-1] != null &&
-						board[y][x-1] instanceof Pawn && board[y][x-1].hasMoved2)
-							return true;
-				else
+				if(board[y+1][x] != null)
 					return false;
 			}
-			if(hasMoved && (y2 - y) > 1)
-				return false;
-			else if(board[y+1][x] != null)
-				return false;
-			return true;
-		} else
-		{
-			if((y - y2) > 2 || (y - y2) <= 0)
-				return false;
-			if(Math.abs(x - x2) == 1 && (y - y2 == 1)) //en passant check
+			else
 			{
-				if(board[y2][x2] != null)
-					return true;
-				else if(((x2 - x) > 0) && board[y][x+1] != null &&
-						board[y][x+1] instanceof Pawn && board[y][x+1].hasMoved2)
-							return true;
-				else if(((x - x2) > 0) && board[y][x-1] != null &&
-						board[y][x-1] instanceof Pawn && board[y][x-1].hasMoved2)
-							return true;
-				else
+				if(board[y-1][x] != null)
 					return false;
 			}
-			if(hasMoved && (y - y2) > 1)
+			
+			if(board[y2][x2] != null)
 				return false;
-			if(board[y-1][x] != null)
-				return false;
-			return true;
+			return !hasMoved;
+		}
+		else
+		{
+			if(board[y2][x2] != null)
+				return true;
+			else
+				return canEnpassant(x2,y2);
+				
 		}
 	}//end tryMove
+	
+	/**
+	 * Checks if current pawn can enpassant if going to given pos
+	 * @param x2 x pos to go to
+	 * @param y2 y pos to go to
+	 * @return if pawn can enpassant by going here
+	 */
+	public boolean canEnpassant(int x2, int y2)
+	{
+		Piece[][] board = this.board.board;
+		if(board[y2][x2] != null)
+			return false;
+		Piece otherPawn = board[y][x2];
+		return otherPawn != null && otherPawn instanceof Pawn && otherPawn.hasMoved2 && 
+				!otherPawn.color.equals(color);
+	}
 	
 	public String toString()
 	{

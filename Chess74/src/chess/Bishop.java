@@ -2,16 +2,16 @@ package chess;
 
 /**
 *This class constructs Pieces representing bishops
-*@authors Dillon Heyck and Francis Joe
+*@author Dillon Heyck and Francis Joe
 */
 public class Bishop extends Piece
 {
-
 	/**
 	 * Creates a Bishop piece
 	 * @param color Whether piece is black or white
 	 * @param x starting x position
 	 * @param y starting y position
+	 * @param board board the piece is on
 	 */
 	public Bishop(String color, int x, int y, Board board) {
 		super(color, x, y, board);

@@ -2,16 +2,16 @@ package chess;
 
 /**
 *This class constructs pieces representing kings
-*@authors Dillon Heyck and Francis Joe
+*@author Dillon Heyck and Francis Joe
 */
 public class King extends Piece
 {
-
 	/**
 	 * Creates a King piece
 	 * @param color Whether piece is black or white
 	 * @param x starting x position
 	 * @param y starting y position
+	 * @param board board the piece is on
 	 */
 	public King(String color, int x, int y, Board board) {
 		super(color, x, y, board);

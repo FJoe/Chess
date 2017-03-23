@@ -15,7 +15,7 @@ public class Chess {
 
 	/**
 	 * Initiates playGame()
-	 * @param args 
+	 * @param args args
 	 */
 	public static void main(String[] args){
 
@@ -41,12 +41,13 @@ public class Chess {
 		//0 = black wins
 		//1 = white wins
 		//2 = draw
+		//3 = stalemate
 		int winner = -1;
 
 		boolean draw = false;
 
 		game.printBoard();
-		
+
 		while(winner == -1)
 		{
 
@@ -87,17 +88,22 @@ public class Chess {
 				Piece toMove = board[startY][startX];
 				if(toMove != null)
 				{
-					//					if((moveType && toMove.color.equals("black")) || 
-					//							(!moveType && toMove.color.equals("white")))
-					//					{
-					//						System.out.println("Illegal move, try again");
-					//						newTurn = false;
-					//					}
-					//					else
+					if((moveType && toMove.color.equals("black")) || 
+							(!moveType && toMove.color.equals("white")))
+					{
+						System.out.println("Illegal move, try again");
+					}
+					else
 					{
 						if(toMove.tryMove(endX, endY) && !wouldBeCheck(toMove, endX, endY))
 						{
 							toMove.move(endX, endY);
+
+							if(pawnCanMorph(game.board) != null)
+							{
+								game.morphPawn(pawnCanMorph(game.board), input);
+							}
+
 							game.printBoard();
 
 							if(moveset[4] == 1)
@@ -106,9 +112,6 @@ public class Chess {
 								draw = false;
 
 							moveType = !moveType;
-
-							if(pawnCanMorph(game.board) != null)
-								morphPawn(pawnCanMorph(game.board), input, game);
 
 							Piece[] thisTeam;
 							Piece[] opponentTeam;
@@ -136,6 +139,13 @@ public class Chess {
 								}
 								else
 									System.out.println("Check");
+							} 
+							else {
+								Piece king = game.getKing(moveType);
+								if(isStalemate(king))
+								{
+									winner = 3;
+								}
 							}
 						}
 						else
@@ -161,13 +171,15 @@ public class Chess {
 			System.out.println("White wins!");
 		else if(winner == 2)
 			System.out.println("Draw");
+		else if(winner == 3)
+			System.out.println("Stalemate");
 
 		in.close();
 	}//end playGame()
 
 	/**
 	 * Checks if a pawn has made it across the board
-	 * @param board to evaluate
+	 * @param board board to evaluate
 	 */
 	static Piece pawnCanMorph(Piece[][] board)
 	{
@@ -181,26 +193,62 @@ public class Chess {
 	}
 
 	/**
-	 * Morphs pawn that makes it across the board
-	 * into the type of piece the user requests.
-	 * If no request is made, then the pawn becomes a
-	 * Queen by default
-	 * @param pawn the pawn to be changed
-	 * @param morphTo To specify what player wants
-	 * @param board to apply morph
+	 * Tests if the input king is in a stalemate
+	 * @param king king to check if in stalemate
+	 * @return boolean if given king is in a stalemate
 	 */
-	static void morphPawn(Piece pawn, String morphTo, Board board)
+	static boolean isStalemate(Piece king)
 	{
-		if(morphTo.endsWith("N"))
-			pawn = new Knight(pawn.color, pawn.x, pawn.y, board);
-		else if(morphTo.endsWith("R"))
-			pawn = new Rook(pawn.color, pawn.x, pawn.y, board);
-		else if(morphTo.endsWith("B"))
-			pawn = new Bishop(pawn.color, pawn.x, pawn.y, board);
-		else if(morphTo.endsWith("p"))
-			;
-		else
-			pawn = new Queen(pawn.color, pawn.x, pawn.y, board);
+		//Ensures 
+		if(!king.hasMoved)
+		{
+			if(king.color.equals("white"))
+			{
+				if((game.board[king.y - 1][king.x] != null && 
+						game.board[king.y - 1][king.x].color.equals(king.color)) &&
+						(game.board[king.y - 1][king.x + 1] != null && 
+						game.board[king.y - 1][king.x].color.equals(king.color)) &&
+						(game.board[king.y - 1][king.x + 1] != null && 
+						game.board[king.y - 1][king.x].color.equals(king.color)))
+					return false;
+			} else
+			{
+				if((game.board[king.y + 1][king.x] != null && 
+						game.board[king.y + 1][king.x].color.equals(king.color)) &&
+						(game.board[king.y + 1][king.x + 1] != null && 
+						game.board[king.y + 1][king.x].color.equals(king.color)) &&
+						(game.board[king.y + 1][king.x + 1] != null && 
+						game.board[king.y + 1][king.x].color.equals(king.color)))
+					return false;
+			}
+		}//finish !hasMoved if block
+
+		//The next checks 
+		if(king.tryMove(king.x, king.y + 1)
+				&& !wouldBeCheck(king, king.x, king.y + 1))
+			return false;
+		if(king.tryMove(king.x, king.y - 1)
+				&& !wouldBeCheck(king, king.x, king.y - 1))
+			return false;
+		if(king.tryMove(king.x+ 1, king.y)
+				&& !wouldBeCheck(king, king.x + 1, king.y))
+			return false;
+		if(king.tryMove(king.x - 1, king.y)
+				&& !wouldBeCheck(king, king.x - 1, king.y))
+			return false;
+		if(king.tryMove(king.x - 1, king.y + 1)
+				&& !wouldBeCheck(king, king.x - 1, king.y + 1))
+			return false;
+		if(king.tryMove(king.x + 1, king.y + 1)
+				&& !wouldBeCheck(king, king.x + 1, king.y + 1))
+			return false;
+		if(king.tryMove(king.x + 1, king.y - 1)
+				&& !wouldBeCheck(king, king.x + 1, king.y - 1))
+			return false;
+		if(king.tryMove(king.x - 1, king.y - 1)
+				&& !wouldBeCheck(king, king.x - 1, king.y - 1))
+			return false;
+		return true;
 	}
 
 	/**
@@ -236,7 +284,7 @@ public class Chess {
 	 * @param toMove piece to move
 	 * @param x2 x position to move to
 	 * @param y2 y position to move to
-	 * @return if team is in check if it moves given piee to x2,y2
+	 * @return if team is in check if it moves given piece to x2,y2
 	 */
 	static boolean wouldBeCheck(Piece toMove, int x2, int y2)
 	{
@@ -272,6 +320,13 @@ public class Chess {
 			rookOrigX = rookCastling.x;
 		}
 
+		Piece enpassed = null;
+		if(toMove instanceof Pawn)
+		{
+			if(((Pawn)toMove).canEnpassant(x2, y2))
+				enpassed = game.board[toMove.y][x2];
+		}
+
 		toMove.move(x2, y2);
 		toReturn = isCheck(teamScenario, otherTeam);
 
@@ -280,6 +335,14 @@ public class Chess {
 		{
 			rookCastling.move(rookOrigX, y2);
 			rookCastling.hasMoved = false;
+		}
+		if(enpassed != null)
+		{
+			game.board[toMove.y][x2] = enpassed;
+			int i = 0;
+			while(i < 16 && otherTeam[i] != null)
+				i++;
+			otherTeam[i] = enpassed;
 		}
 
 

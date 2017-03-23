@@ -2,7 +2,7 @@ package chess;
 
 /**
 *This class constructs Pieces representing queens
-*@authors Dillon Heyck and Francis Joe
+*@author Dillon Heyck and Francis Joe
 */
 public class Queen extends Piece
 {
@@ -12,6 +12,7 @@ public class Queen extends Piece
 	 * @param color Whether piece is black or white
 	 * @param x starting x position
 	 * @param y starting y position
+	 * @param board board the piece is on
 	 */
 	public Queen(String color, int x, int y, Board board) {
 		super(color, x, y, board);

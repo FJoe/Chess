@@ -2,7 +2,7 @@ package chess;
 
 /**
 *This class constructs Pieces representing rooks
-*@authors Dillon Heyck and Francis Joe
+*@author Dillon Heyck and Francis Joe
 */
 public class Rook extends Piece
 {
@@ -11,6 +11,7 @@ public class Rook extends Piece
 	 * @param color Whether piece is black or white
 	 * @param x starting x position
 	 * @param y starting y position
+	 * @param board board the piece is on
 	 */
 	public Rook(String color, int x, int y, Board board){
 		super(color, x, y, board);
