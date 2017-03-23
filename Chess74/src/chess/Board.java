@@ -124,6 +124,7 @@ public class Board
 		}//end outer for loop
 
 		System.out.println(" a  b  c  d  e  f  g  h");
+		System.out.println();
 	}//end printBoard()
 
 	/**
@@ -144,8 +145,6 @@ public class Board
 			morphed = new Rook(pawn.color, pawn.x, pawn.y, this);
 		else if(morphTo.endsWith("B"))
 			morphed = new Bishop(pawn.color, pawn.x, pawn.y, this);
-		else if(morphTo.endsWith("p"))
-			morphed = pawn;
 		else
 			morphed = new Queen(pawn.color, pawn.x, pawn.y, this);
 		board[pawn.y][pawn.x] = morphed; 

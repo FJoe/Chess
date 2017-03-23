@@ -41,7 +41,6 @@ public class Chess {
 		//0 = black wins
 		//1 = white wins
 		//2 = draw
-		//3 = stalemate
 		int winner = -1;
 
 		boolean draw = false;
@@ -53,19 +52,21 @@ public class Chess {
 			Piece[] team;
 			if(moveType)
 			{
-				System.out.println("White's move: ");
+				System.out.print("White's move: ");
 				team = game.whitePieces;
 			}
 			else
 			{
-				System.out.println("Black's move: ");
+				System.out.print("Black's move: ");
 				team = game.blackPieces;
 			}
+
 			for(int i = 0; i < 16; i++)
 				if(team[i] != null)
 					team[i].hasMoved2 = false;
 
 			String input = in.nextLine();
+			System.out.println();
 
 			if(input.equals("resign"))
 			{
@@ -82,6 +83,7 @@ public class Chess {
 				else
 				{
 					System.out.println("Illegal move, try again");
+					System.out.println();
 				}
 			}
 
@@ -100,6 +102,7 @@ public class Chess {
 							(!moveType && toMove.color.equals("white")))
 					{
 						System.out.println("Illegal move, try again");
+						System.out.println();
 					}
 					else
 					{
@@ -152,23 +155,24 @@ public class Chess {
 								Piece king = game.getKing(moveType);
 								if(isStalemate(king))
 								{
-									winner = 3;
+									System.out.println("Stalemate");
+									winner = 2;
 								}
 							}
 						}
 						else
 						{
 							System.out.println("Illegal move, try again");
-						}					}
+							System.out.println();
+						}					
+					}
 				}
 				else
 				{
 					System.out.println("Illegal move, try again");
+					System.out.println();
 				}
-
-
 			}
-
 		}
 
 		//end while loop
@@ -179,8 +183,6 @@ public class Chess {
 			System.out.println("White wins!");
 		else if(winner == 2)
 			System.out.println("Draw");
-		else if(winner == 3)
-			System.out.println("Stalemate");
 
 		in.close();
 	}//end playGame()
