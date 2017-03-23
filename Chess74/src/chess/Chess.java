@@ -50,12 +50,20 @@ public class Chess {
 
 		while(winner == -1)
 		{
-
-
+			Piece[] team;
 			if(moveType)
+			{
 				System.out.println("White's move: ");
+				team = game.whitePieces;
+			}
 			else
+			{
 				System.out.println("Black's move: ");
+				team = game.blackPieces;
+			}
+			for(int i = 0; i < 16; i++)
+				if(team[i] != null)
+					team[i].hasMoved2 = false;
 
 			String input = in.nextLine();
 

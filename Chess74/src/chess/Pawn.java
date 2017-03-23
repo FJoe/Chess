@@ -49,6 +49,17 @@ public class Pawn extends Piece
 		if(xDif > 1)
 			return false;
 		
+		if(color.equals("black"))
+		{
+			if(y2 < this.y)
+				return false;
+		}
+		else
+		{
+			if(y2 > this.y)
+				return false;
+		}
+		
 		if(yDif == 2 && xDif == 1)
 			return false;
 		else if(yDif == 1 && xDif == 0)
